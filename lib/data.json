@@ -1,0 +1,40 @@
+"status": 200,
+  "data": [
+    {
+      "use_case": "blog",
+      "attributes": {
+        "name": "Blog",
+        "description": "A great way to connect with others, share personal stories, offer tips, or discuss interests.",
+        "tags": ["blog", "personal"],
+        "features": ["Accessible", "Mobile Compatible", "Multi-Language Support", "Downloadable PDF"]
+      }
+    }, 
+    {
+      "use_case": "collection",
+      "attributes": {
+        "name": "Collection",
+        "description": "Use this to link to a portfolio of work, showcase work, or anything you like!",
+        "tags": ["collection", "personal", "professional"],
+        "features": ["Accessible", "Mobile Compatible", "Multi-Language Support", "Downloadable PDF"]
+      }
+    }, 
+    {
+      "use_case": "course",
+      "attributes": {
+        "name": "Course",
+        "description": "Publish your online course materials easily!",
+        "tags": ["course", "online", "educational"],
+        "features": ["Accessible", "Mobile Compatible", "Multi-Language Support", "Downloadable PDF"]
+      }
+    }, 
+    {
+      "use_case": "website",
+      "attributes": {
+        "name": "Website",
+        "description": "Design a website easily.",
+        "tags": ["website", "site", "personal", "educational", ],
+        "features": ["Accessible", "Mobile Compatible", "Multi-Language Support", "Downloadable PDF"]
+      }
+    }, 
+  ]
+}
