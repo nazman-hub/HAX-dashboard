@@ -1,4 +1,4 @@
-"status": 200,
+{"status": 200,
   "data": [
     {
       "use_case": "blog",
@@ -32,9 +32,9 @@
       "attributes": {
         "name": "Website",
         "description": "Design a website easily.",
-        "tags": ["website", "site", "personal", "educational", ],
+        "tags": ["website", "site", "personal", "educational"],
         "features": ["Accessible", "Mobile Compatible", "Multi-Language Support", "Downloadable PDF"]
       }
-    }, 
+    }
   ]
 }

@@ -12,36 +12,14 @@
       margin: 0;
       padding: 0;
     }
-    #demo {
-      margin: var(--ddd-spacing-2);
-    }
-    hax-dashboard {
-      margin: var(--ddd-spacing-2);
-      border: var(--ddd-border-md);
-      border-radius: var(--ddd-radius-lg);
-    }
-    hax-dashboard:hover {
-      box-shadow: var(--ddd-boxShadow-sm);
-    }
-    #example {
-      --hax-dashboard-font-size: var(--ddd-font-size-l);
-      background-color: var(--ddd-accent-2);
-      color: var(--ddd-primary-17);
-    }
+
   </style>
   <title>hax-dashboard</title>
 </head>
 
 <body>
   <div id="demo">
-    <h1>hax-dashboard</h1>
-    <!-- this is going to do whatever the tag's defaults are -->
-    <h2>Default</h2>
-    <hax-dashboard></hax-dashboard>
-    <h2>Slot usage</h2>
-    <hax-dashboard data-accent="2" data-primary="17"><div>Sample slot content</div></hax-dashboard>
-    <h2>Property usage</h2>
-    <hax-dashboard id="example" title="Sample property title"></hax-dashboard>
+    <hax-dashboard></hax-dashboard> 
   </div>
   <script type="module" src="./hax-dashboard.js"></script>
 
