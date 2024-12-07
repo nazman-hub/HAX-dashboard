@@ -24,7 +24,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     this.registerLocalization({
       context: this,
       localesPath:
-        new URL("./locales/hax-card.ar.json", import.meta.url).href +
+        new URL("./locales/hax-dashboard.ar.json", import.meta.url).href +
         "/../",
       locales: ["ar", "es", "hi", "zh"],
     });
