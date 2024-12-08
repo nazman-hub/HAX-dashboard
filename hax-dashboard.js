@@ -24,10 +24,10 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     
     this.data = [];
     this.activeFilters = [];
+    this.filteredData = [];
     this.filterIsActive = false;
     this.logoUrl = new URL('./lib/logo.png', import.meta.url).href
-    this.resultCount = 0;
-    this.activeResultCount = 0;
+    this.dataCount = 0;
 
     this.registerLocalization({
       context: this,
@@ -45,6 +45,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       title: { type: String },  
       activeFilters: { type: Array },  
       data: { type: Array },
+      filteredData: { type: Array, reflect: true },
       filterIsActive: { type: Boolean },
 
     };
@@ -207,7 +208,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
           ${this.activeFilters.map((filter)=>html`<p>${filter}</p>`)}
       </div>
       <div class="tag-right">
-        ${this.activeResultCount} results
+        ${this.dataCount} results
       </div>
     </div>
 
@@ -232,21 +233,12 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
 
       <div class="cards-wrapper">
           ${
-            this.data.map((item)=>{
-            let doHide = false;
-            if (this.filterIsActive){
-              doHide = true;
-              
-              if(item.tags.some(r=> this.activeFilters.includes(r))){
-                doHide = false;
-                              
-              }
-            }
+            this.filteredData.map((item)=>{
+            
             return html`
             <hax-card 
               title="${item.title}"
               description="${item.description}"
-              ?isHidden="${doHide}"
             ></hax-card>
             `})
             }
@@ -259,11 +251,20 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     
   }
 
-  activateFilter(){
-    let filteredData = [];
-    this.data.forEach((item)=>{
-      
-    })
+  filterData(){
+    if(this.filterIsActive){
+      this.filteredData = [];
+      this.data.forEach((item)=>{
+        if(item.tags.some(r=> this.activeFilters.includes(r))){ //check if filter includes item tag
+          this.filteredData.push(item);
+        }
+      })
+    } else{
+      this.filteredData = this.data;
+    
+    }
+    this.dataCount = this.filteredData.length;
+
   }
   updated(changedProperties){
     // console.log(changedProperties)
@@ -277,7 +278,6 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
 
   updateFilter(){
     this.activeFilters = [];
-    this.activateFilter();
 
     //update activeFilters from checkbox
     let filters = this.shadowRoot.querySelectorAll('input[name="filter"]');
@@ -289,7 +289,6 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
 
     //update activeFilters from search bar
     let searchInput = this.shadowRoot.querySelector('input[name="search"]').value;
-    console.log(searchInput)
     if(searchInput){
       this.activeFilters.push(searchInput.toLowerCase());
 
@@ -301,6 +300,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     } else{
       this.filterIsActive = true;
     }
+    this.filterData();
 
     // console.log(this.activeFilters)
   }
@@ -317,8 +317,9 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     .then(data => {
       this.data = [];
       this.data = data.data; 
+      this.filteredData = this.data; 
       this.loading = false;
-      this.resultCount = this.data.length;
+      this.dataCount = this.data.length;
 
     })
     .catch(error => console.error('Error fetching the JSON:', error));
