@@ -22,6 +22,9 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
   constructor() {
     super();
     
+    this.searchResults = [];
+    this.activeFilters = [];
+
     this.registerLocalization({
       context: this,
       localesPath:
@@ -35,13 +38,15 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
   static get properties() {
     return {
       ...super.properties,
-      title: { type: String },
+      title: { type: String },  
+      activeFilters: { type: Array },  
+      searchResults: { type: Array },
+      isHidden: { type: Boolean },
+
     };
   }
 
-  firstUpdated(){
-    this.updateResults();
-  }
+
 
   // Lit scoped styles
   static get styles() {
@@ -106,7 +111,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         display: flex;
         justify-content: space-around;
         align-items: center;
-        background-color: navajowhite;
+        /* background-color: navajowhite; */
       }
 
       .tag{
@@ -160,7 +165,12 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         display: flex;
         gap: 20px;
         margin: auto;
+        flex-wrap: wrap;
       }
+      hax-card{
+        flex: 0 0 0;
+      }
+      
 
     `]; 
   }
@@ -206,50 +216,82 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
 
         <div class="filter-wrapper"> 
           <h3>Filters</h3>
-          <div><input type="checkbox" name="portfolio" value="portfolio"> Portfolio </div>
-          <div><input type="checkbox" name="course" value="course"> Course</div>
-          <div><input type="checkbox" name="resume" value="resume"> Resume</div>
-          <div><input type="checkbox" name="blog" value="blog"> Blog </div>
-          <div><input type="checkbox" name="research" value="research"> Research Website</div>
-          <div><input type="checkbox" name="collection" value="collection"> Collection </div>
+          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="portfolio"> Portfolio </div>
+          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="course"> Course</div>
+          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="resume"> Resume</div>
+          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="blog"> Blog </div>
+          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="research"> Research Website</div>
+          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="collection"> Collection </div>
        </div>
       </div>
 
       <div class="cards-wrapper">
-          <hax-card title="card"></hax-card>
-          <hax-card title="card"></hax-card>
-          <hax-card title="card"></hax-card>
+          ${this.searchResults?
+            this.searchResults.map((item)=>html`
+            <hax-card 
+              title="${item.title}"
+              description="${item.description}"
+              ?isHidden="${this.activeFilters.includes(item.use_case)}"
+            ></hax-card>
+            `):
+            html``
+            }
       </div>
     </div>
 </div>`;
   }
-  
+  firstUpdated(){
+    this.updateResults();
+
+  }
+  updated(changedProperties){
+    // console.log(changedProperties)
+    if (changedProperties.has('activeFilters')){
+      console.log(1);
+    }
+  }
   search(){
   
     this.searchQuery = this.shadowRoot.querySelector('.search-input').value;
-    console.log(this.searchQuery);
   }
 
-  updateResults(){
-    console.log()
-    // fetch('./data.json')
-    // .then(response => {
-    //   if (!response.ok) {
-    //     throw new Error('Network response was not ok ' + response.statusText);
-    //   }
-    //   return response.json();
-    // })
-    // .then(data => console.log(data))
-    // .catch(error => console.error('Error fetching the JSON:', error));
-    // }
+  updateFilter(){
+    this.activeFilters = [];
 
-    // /**
-    //  * haxProperties integration via file reference
-    //  */
-    // static get haxProperties() {
-    //   return new URL(`./lib/${this.tag}.haxProperties.json`, import.meta.url)
-    //     .href;
-    // 
+    let filters = this.shadowRoot.querySelectorAll('input[name="filter"]');
+    filters.forEach(checkbox => {
+      if(checkbox.checked){
+        this.activeFilters.push(checkbox.value);
+      }
+      
+    });
+
+    console.log(this.activeFilters)
+  }
+  
+  updateResults(){
+    fetch('lib/data.json')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then(data => {
+      this.searchResults = [];
+      this.searchResults = data.data; 
+      this.loading = false;
+    })
+    .catch(error => console.error('Error fetching the JSON:', error));
+    }
+
+    /**
+     * haxProperties integration via file reference
+     */
+    static get haxProperties() {
+      return new URL(`./lib/${this.tag}.haxProperties.json`, import.meta.url)
+        .href;
+    
   }
 }
 

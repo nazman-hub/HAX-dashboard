@@ -20,21 +20,25 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
 
   constructor() {
     super();
-    
-    this.registerLocalization({
-      context: this,
-      localesPath:
-        new URL("./locales/hax-card.ar.json", import.meta.url).href +
-        "/../",
-      locales: ["ar", "es", "hi", "zh"],
-    });
+    this.title =  '';
+    this.description =  '';
+    this.imageSrc =  '';
+    this.url =  '';
+    this.isHidden = false;
+
+
   }
 
-  // Lit reactive properties
   static get properties() {
     return {
-      ...super.properties,
+
       title: { type: String },
+      description: { type: String },
+      imageSrc: { type: String },
+      url: { type: String },
+      isHidden: { type: Boolean, reflect: true },
+
+
     };
   }
 
@@ -43,7 +47,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     return [super.styles,
     css`
 
-:host {
+    :host {
       display:block;
 
     }
@@ -56,7 +60,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       gap: var(--ddd-spacing-3, 20px);
       flex-wrap: wrap;
 
-      min-height: 450px;
+      height: 220px;
       padding: var(--ddd-spacing-5, 20px);
       border: var(--ddd-border-sm, black solid 3px);
       font-family: var(--ddd-font-primary, roboto);
@@ -65,6 +69,10 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       background-color: var(--site-hex-code, --theme-accent);
     }
 
+    :host([isHidden]) {
+      background-color: black;
+      display: none;
+    }
 
     
     .text-container{
@@ -100,7 +108,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       margin: 0 3px 0 5px;
     }
 
-    .info-row {
+    .text-row {
         display: flex;
         flex-direction: column;
     }
@@ -123,50 +131,23 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     return html`
 <div class="card-container" style="--site-hex-code: ${this.hexCode};">
 
-     aaaa  
-<div class="title" ?hidden="${this.title === ''}">
-  <a class="text" href="${this.pageLink}" target="_blank" rel="noopener noreferrer">
+       
+  <a class="text title" href="${this.pageLink}" target="_blank" rel="noopener noreferrer">
     ${this.title}
   </a>
-</div> 
 
 
-<div class="image-container" ?hidden="${this.imageSrc === ''}">
   <a href="${this.imageSrc}" target="_blank" rel="noopener noreferrer">
     <img src="${this.imageSrc}" alt="${this.imageSrc}">
   </a>
-</div>
 
-<div class="text-container" >
+  <div class="text-container" >
 
-  <div ?hidden="${this.description === ''}">
-    <div class="info-row">
-      <span class="label"><strong>Description</strong></span>
+    <div class="text-row">
       <span>${this.description}</span>
     </div>
-  </div>       
 
-  <div ?hidden="${this.dateUpdated === ''}">
-    <div class="info-row">
-        <span class="label"><strong>Last updated</strong></span>
-        <span>${this.dateUpdated} </span>
-    </div>
   </div>
-
-  <div ?hidden="${this.readTime === ''}">
-    <div class="info-row">
-        <span class="label"><strong>Read time</strong></span>
-        <span>${this.readTime} minutes</span>
-    </div>
-  </div>
-
-  <div ?hidden="${this.pageHtml=== ''}">
-    <div class="info-row">
-        <a class="text" href="${this.pageHtml}" target="_blank" rel="noopener noreferrer"><strong>View page source</strong></a>
-    </div>
-  </div>
-
-</div>
 </div>
 
     `;
