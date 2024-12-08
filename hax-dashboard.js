@@ -290,7 +290,8 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
   }
   
   fetchData(){
-    fetch('lib/data.json')
+    let jsonUrl = new URL('./lib/data.json', import.meta.url).href
+    fetch(jsonUrl)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok ' + response.statusText);
