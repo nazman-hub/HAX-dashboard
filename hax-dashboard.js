@@ -211,8 +211,8 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     <div class="cards-search section">
 
       <div class="search-filter">
-        <input class="search-input" placeholder="Enter 'haxtheweb.org'"
-          @keydown="${(e)=>{if(e.key==='Enter'){this.search();}}}"/> 
+        <input class="search-input" placeholder="Enter 'haxtheweb.org'" name="search"
+          @keydown="${(e)=>{if(e.key==='Enter'){this.updateFilter();}}}"/> 
 
         <div class="filter-wrapper"> 
           <h3>Filters</h3>
@@ -263,13 +263,22 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
   updateFilter(){
     this.activeFilters = [];
 
+    //update activeFilters from checkbox
     let filters = this.shadowRoot.querySelectorAll('input[name="filter"]');
     filters.forEach(checkbox => {
       if(checkbox.checked){
         this.activeFilters.push(checkbox.value);
       }
-      
     });
+
+    //update activeFilters from search bar
+    let searchInput = this.shadowRoot.querySelector('input[name="search"]').value;
+    console.log(searchInput)
+    if(searchInput){
+      this.activeFilters.push(searchInput.toLowerCase());
+
+    }
+
 
     if (this.activeFilters.length === 0){
       this.filterIsActive = false;
