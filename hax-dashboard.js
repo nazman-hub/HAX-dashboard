@@ -24,6 +24,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     
     this.searchResults = [];
     this.activeFilters = [];
+    this.filterIsActive = false;
 
     this.registerLocalization({
       context: this,
@@ -41,7 +42,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       title: { type: String },  
       activeFilters: { type: Array },  
       searchResults: { type: Array },
-      isHidden: { type: Boolean },
+      filterIsActive: { type: Boolean },
 
     };
   }
@@ -164,7 +165,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       .cards-wrapper{
         display: flex;
         gap: 20px;
-        margin: auto;
+        /* margin: auto; */
         flex-wrap: wrap;
       }
       hax-card{
@@ -200,11 +201,10 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
 
     <div class="tag section">
       <div class="tag-left">
-          <p>tag</p>
-          <p>tag</p>
+          ${this.activeFilters.map((filter)=>html`<p>${filter}</p>`)}
       </div>
       <div class="tag-right">
-        38 results
+        ${this.searchResults.length} results
       </div>
     </div>
 
@@ -216,12 +216,14 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
 
         <div class="filter-wrapper"> 
           <h3>Filters</h3>
-          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="portfolio"> Portfolio </div>
-          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="course"> Course</div>
-          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="resume"> Resume</div>
           <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="blog"> Blog </div>
+          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="collection"> Collection</div>
+          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="course"> Course</div>
+          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="website"> Website</div>
           <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="research"> Research Website</div>
-          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="collection"> Collection </div>
+          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="portfolio"> Portfolio </div>
+          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="resume"> Resume</div>
+
        </div>
       </div>
 
@@ -231,7 +233,11 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
             <hax-card 
               title="${item.title}"
               description="${item.description}"
-              ?isHidden="${this.activeFilters.includes(item.use_case)}"
+              ?isHidden="${
+                this.filterIsActive?
+                !item.tags.some(r=> this.activeFilters.includes(r))
+                :false
+                }"
             ></hax-card>
             `):
             html``
@@ -241,17 +247,16 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
 </div>`;
   }
   firstUpdated(){
-    this.updateResults();
+    this.fetchData();
 
   }
   updated(changedProperties){
     // console.log(changedProperties)
     if (changedProperties.has('activeFilters')){
-      console.log(1);
+      // console.log(1);
     }
   }
   search(){
-  
     this.searchQuery = this.shadowRoot.querySelector('.search-input').value;
   }
 
@@ -266,10 +271,16 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       
     });
 
-    console.log(this.activeFilters)
+    if (this.activeFilters.length === 0){
+      this.filterIsActive = false;
+    } else{
+      this.filterIsActive = true;
+    }
+
+    // console.log(this.activeFilters)
   }
   
-  updateResults(){
+  fetchData(){
     fetch('lib/data.json')
     .then(response => {
       if (!response.ok) {
