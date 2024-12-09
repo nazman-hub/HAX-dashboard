@@ -69,7 +69,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       font-family: var(--ddd-font-primary, roboto);
       font-size:16px;
       color: var(--ddd-theme-primary);
-      background-color: var(--site-hex-code, --theme-accent);
+      background-color: var(--ddd-theme-default-white);
     }
 
     :host([isHidden]) {
@@ -129,6 +129,13 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     .title a{
       /* text-decoration: none;  */
       color: unset; 
+    }
+    #select-button{
+      width: 80px;
+      height: 40px;
+      background-color: black;
+      color: white;
+      /* font-size: inherit; */
     }
 
 

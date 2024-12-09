@@ -25,7 +25,6 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     this.data = [];
     this.activeFilters = [];
     this.filteredData = [];
-    this.filterIsActive = false;
     this.logoUrl = new URL('./lib/logo.png', import.meta.url).href
     this.dataCount = 0;
     this.selectedCard = [];
@@ -49,7 +48,6 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       activeFilters: { type: Array },  
       data: { type: Array },
       filteredData: { type: Array, reflect: true },
-      filterIsActive: { type: Boolean },
 
     };
   }
@@ -70,7 +68,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       :host {
         display: block;
         color: var(--ddd-theme-primary);
-        background-color: var(--ddd-theme-accent);
+        /* background-color: var(--ddd-theme-accent); */
         font-family: var(--ddd-font-navigation);
       }
       .wrapper {
@@ -85,11 +83,10 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         /* width: 1300px; */
         margin: auto;
         padding: 0 30px;
-        /* background-color: lightblue; */
+        background-color: white, var(--ddd-theme-default-slateMaxLight);
+
       }
-      .header-background{
-        background-color: var(--ddd-theme-default-info);
-      }
+
       .header{
         display: flex;
         justify-content: space-between;
@@ -98,6 +95,8 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         /* width: 1000px; */
         margin: auto;
         /* padding-top: var(--ddd-spacing-2); */
+        background-color: var(--ddd-theme-default-info);
+
         
       }
       .logo{
@@ -119,7 +118,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         display: flex;
         justify-content: space-around;
         align-items: center;
-        background-color: navajowhite;
+        /* background-color: navajowhite; */
       }
 
       .tag{
@@ -133,6 +132,9 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       }
       .tag-left{
         display: flex;
+        align-items: center;
+        gap: 5px;
+
         /* gap: var(--ddd-spacing-4); */
       }
       .tag-left p{
@@ -150,10 +152,10 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         display: flex;
         flex-direction: column;
         min-width: 250px;
-        /* border-right: 1px solid #000;  */
         gap: 10px;
-        background-color: lightblue;
+        background-color: var(--ddd-theme-default-white, blue);
         padding: 20px;
+        border: var(--ddd-border-sm);
 
       }
 
@@ -163,15 +165,12 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       }
 
       .filter-wrapper{
-        /* font-size: 16px; */
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
 
       }
-      .filter-wrapper h3{
-        /* font-size: 20px; */
-        /* margin-bottom: 3px; */
-
-      }
-
+      
       .cards-wrapper{
         display: flex;
         gap: 20px;
@@ -208,6 +207,18 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         background-color: gray;
         cursor: pointer;
       }
+
+      .filter-title h3{
+        font-size: inherit;
+      }
+      #reset-button{
+        color: var(--ddd-theme-default-link);
+        text-decoration: underline;
+      }
+      #reset-button:hover{
+        cursor: pointer;
+      }
+      
       
 
     `]; 
@@ -241,6 +252,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     <div class="tag section">
       <div class="tag-left">
           ${this.activeFilters.map((filter)=>html`<p>${filter}</p>`)}
+          ${this.activeFilters.length>0? html`<span id="reset-button" @click="${this.resetFilter}">Clear all</span>`:html``}
       </div>
       <div class="tag-right">
         ${this.dataCount} results
@@ -250,13 +262,14 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     <div class="cards-search section">
 
       <div class="search-filter">
-        <input class="search-input" placeholder="Enter 'haxtheweb.org'" name="search"
+        <input class="search-input" placeholder="personal, blog, professional, etc." name="search"
           @keyup="${this.updateFilter}"/> 
 
         <div class="filter-wrapper"> 
           <div class="filter-title"> 
             <h3>Filters</h3>
-            <button id="reset-button" @click="${this.resetFilter}">Reset</button>
+
+            
           </div>
           ${this.data.map((item)=>html`<div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="${item.use_case}"> ${item.title} </div>`)}
 
@@ -288,7 +301,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
   }
 
   filterData(){
-    if(this.filterIsActive){
+    if(this.activeFilters.length > 0){
       this.filteredData = [];
       this.data.forEach((item)=>{
         if(item.tags.some(r=> this.activeFilters.includes(r))){ //check if filter includes item tag
@@ -333,7 +346,6 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
 
   resetFilter(){
     this.activeFilters = [];
-    this.filterIsActive = false;
     let filters = this.shadowRoot.querySelectorAll('input[name="filter"]');
     filters.forEach(checkbox => {
       if(checkbox.checked){
@@ -364,11 +376,6 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     }
 
 
-    if (this.activeFilters.length === 0){
-      this.filterIsActive = false;
-    } else{
-      this.filterIsActive = true;
-    }
     this.filterData();
 
     // console.log(this.activeFilters)
