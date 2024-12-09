@@ -196,6 +196,14 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         font-size: inherit;
 
       }
+      .continue-button:disabled{
+        
+        background-color: gray;
+        color: white;
+        padding: 5px;
+        font-size: inherit;
+
+      }
       .continue-button:hover{
         background-color: gray;
         cursor: pointer;
@@ -228,7 +236,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       <p class="description">Create anything you want</p>      
     </div>
     <div class="continue-wrapper section">
-      <button class="continue-button">Continue</button>
+      <button class="continue-button" @click="${this.continue}" disabled>Continue</button>
     </div>
     <div class="tag section">
       <div class="tag-left">
@@ -309,21 +317,33 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
   }
 
   _handleCardClick(event) {
-    this.selectedCard = [];
-    this.selectedCard.push(event.target.name);
+    if(event.target.name === this.selectedCard[0]){
+      this.selectedCard = [];
+      this.shadowRoot.querySelector(".continue-button").disabled = true;
+    } else{
+      this.selectedCard = [];
+      this.selectedCard.push(event.target.name);
+      this.shadowRoot.querySelector(".continue-button").disabled = false;
+    }
+    
+    
     this.requestUpdate();
-    console.log(this.selectedCard);
+    console.log(this.selectedCard[0]);
   }
 
   resetFilter(){
     this.activeFilters = [];
     this.filterIsActive = false;
+    let filters = this.shadowRoot.querySelectorAll('input[name="filter"]');
+    filters.forEach(checkbox => {
+      if(checkbox.checked){
+        checkbox.checked = false;
+      }
+    });
 
     this.filterData();
 
   }
-  
-
 
   updateFilter(){
     this.activeFilters = [];
@@ -352,6 +372,10 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     this.filterData();
 
     // console.log(this.activeFilters)
+  }
+
+  continue(){
+    alert(this.selectedCard[0]);
   }
   
   fetchData(){

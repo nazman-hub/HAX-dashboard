@@ -160,7 +160,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
 
   </div>
 
-  <button id="select-button" @click="${this._handleClick}">Select</button>
+  <button id="select-button" @click="${this._handleClick}">${this.isSelected? html`Selected`: html`Select`}</button>
 </div>
     `;
   }
