@@ -21,6 +21,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
   constructor() {
     super();
     this.title =  '';
+    this.name =  '';
     this.description =  '';
     this.imageSrc =  '';
     this.url =  '';
@@ -32,11 +33,13 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
   static get properties() {
     return {
 
+      name: { type: String },
       title: { type: String },
       description: { type: String },
       imageSrc: { type: String },
       url: { type: String },
       isHidden: { type: Boolean, reflect: true },
+      isSelected: { type: Boolean, reflect: true },
 
 
     };
@@ -72,6 +75,12 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     :host([isHidden]) {
       background-color: black;
       display: none;
+    }
+
+    :host([isSelected]) {
+      .card-container{
+        background-color: gray;
+      }
     }
 
     
@@ -132,9 +141,11 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
 <div class="card-container" style="--site-hex-code: ${this.hexCode};">
 
        
-  <a class="text title" href="${this.pageLink}" target="_blank" rel="noopener noreferrer">
+  <a  href="${this.pageLink}" target="_blank" rel="noopener noreferrer">  </a>
+
+  <div class="text title">
     ${this.title}
-  </a>
+  </div>
 
 
   <a href="${this.imageSrc}" target="_blank" rel="noopener noreferrer">
@@ -148,10 +159,23 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     </div>
 
   </div>
-</div>
 
+  <button id="select-button" @click="${this._handleClick}">Select</button>
+</div>
     `;
   }
+  
+
+  //chatGPT
+  _handleClick() {
+    const event = new CustomEvent('card-click', {
+      detail: { message: 'Button in card clicked!' },
+      bubbles: true,   // Makes the event bubble up to the parent
+      composed: true,  // Allows the event to pass through shadow DOM boundaries
+    });
+    this.dispatchEvent(event);  // Dispatch the event
+  }
+
 
   /**
    * haxProperties integration via file reference

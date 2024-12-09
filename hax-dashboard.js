@@ -28,6 +28,9 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     this.filterIsActive = false;
     this.logoUrl = new URL('./lib/logo.png', import.meta.url).href
     this.dataCount = 0;
+    this.selectedCard = [];
+    this._handleCardClick = this._handleCardClick.bind(this); // Bind the handler
+
 
     this.registerLocalization({
       context: this,
@@ -70,16 +73,16 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         background-color: var(--ddd-theme-accent);
         font-family: var(--ddd-font-navigation);
       }
-      /* .wrapper {
-        margin: var(--ddd-spacing-2);
-        padding: var(--ddd-spacing-4);
-      } */
+      .wrapper {
+        display: block;
+
+      }
       /* h3 span {
         font-size: var(--hax-dashboard-label-font-size, var(--ddd-font-size-s));
       } */
 
       .section{
-        max-width: 1300px;
+        /* width: 1300px; */
         margin: auto;
         padding: 0 30px;
         /* background-color: lightblue; */
@@ -116,20 +119,21 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         display: flex;
         justify-content: space-around;
         align-items: center;
-        /* background-color: navajowhite; */
+        background-color: navajowhite;
       }
 
       .tag{
         display: flex;
         justify-content: space-between;
-        padding-top: 15px;
-        padding-bottom: 15px;
-        font-size: 16px;
+        align-items: center;
+        /* font-size: 16px; */
+        min-height: 40px;
+        
 
       }
       .tag-left{
         display: flex;
-        gap: var(--ddd-spacing-4);
+        /* gap: var(--ddd-spacing-4); */
       }
       .tag-left p{
         background-color: lightgray;
@@ -145,9 +149,11 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       .search-filter{
         display: flex;
         flex-direction: column;
-        width: 250px;
-        border-right: 1px solid #000; 
+        min-width: 250px;
+        /* border-right: 1px solid #000;  */
         gap: 10px;
+        background-color: lightblue;
+        padding: 20px;
 
       }
 
@@ -157,12 +163,12 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       }
 
       .filter-wrapper{
-        font-size: 16px;
+        /* font-size: 16px; */
 
       }
       .filter-wrapper h3{
-        font-size: 20px;
-        margin-bottom: 3px;
+        /* font-size: 20px; */
+        /* margin-bottom: 3px; */
 
       }
 
@@ -171,9 +177,28 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         gap: 20px;
         /* margin: auto; */
         flex-wrap: wrap;
+        padding-left: 20px;
       }
       hax-card{
         flex: 0 0 0;
+      }
+
+      .continue-wrapper{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      .continue-button{
+        
+        background-color: black;
+        color: white;
+        padding: 5px;
+        font-size: inherit;
+
+      }
+      .continue-button:hover{
+        background-color: gray;
+        cursor: pointer;
       }
       
 
@@ -202,7 +227,9 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       </div>
       <p class="description">Create anything you want</p>      
     </div>
-
+    <div class="continue-wrapper section">
+      <button class="continue-button">Continue</button>
+    </div>
     <div class="tag section">
       <div class="tag-left">
           ${this.activeFilters.map((filter)=>html`<p>${filter}</p>`)}
@@ -216,17 +243,15 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
 
       <div class="search-filter">
         <input class="search-input" placeholder="Enter 'haxtheweb.org'" name="search"
-          @keydown="${(e)=>{if(e.key==='Enter'){this.updateFilter();}}}"/> 
+          @keyup="${this.updateFilter}"/> 
 
         <div class="filter-wrapper"> 
-          <h3>Filters</h3>
-          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="blog"> Blog </div>
-          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="collection"> Collection</div>
-          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="course"> Course</div>
-          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="website"> Website</div>
-          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="research"> Research Website</div>
-          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="portfolio"> Portfolio </div>
-          <div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="resume"> Resume</div>
+          <div class="filter-title"> 
+            <h3>Filters</h3>
+            <button id="reset-button" @click="${this.resetFilter}">Reset</button>
+          </div>
+          ${this.data.map((item)=>html`<div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="${item.use_case}"> ${item.title} </div>`)}
+
 
        </div>
       </div>  
@@ -239,6 +264,8 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
             <hax-card 
               title="${item.title}"
               description="${item.description}"
+              name="${item.use_case}"
+              ?isSelected="${this.selectedCard[0] === item.use_case}"
             ></hax-card>
             `})
             }
@@ -248,6 +275,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
   }
   firstUpdated(){
     this.fetchData();
+    let x = this.shadowRoot.querySelector('hax-card');
     
   }
 
@@ -264,17 +292,38 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     
     }
     this.dataCount = this.filteredData.length;
+    let x = this.shadowRoot.querySelector('hax-card').querySelector('button');
+    // console.log(x)
+
 
   }
   updated(changedProperties){
-    // console.log(changedProperties)
-    if (changedProperties.has('activeFilters')){
-      // console.log(1);
+    if (changedProperties.has('filteredData')){
+      const cards = this.shadowRoot.querySelectorAll('hax-card');
+      cards.forEach((card)=>{
+        if (card) {
+          card.addEventListener('card-click', this._handleCardClick);
+        }
+      })
     }
   }
-  search(){
-    this.searchQuery = this.shadowRoot.querySelector('.search-input').value;
+
+  _handleCardClick(event) {
+    this.selectedCard = [];
+    this.selectedCard.push(event.target.name);
+    this.requestUpdate();
+    console.log(this.selectedCard);
   }
+
+  resetFilter(){
+    this.activeFilters = [];
+    this.filterIsActive = false;
+
+    this.filterData();
+
+  }
+  
+
 
   updateFilter(){
     this.activeFilters = [];
