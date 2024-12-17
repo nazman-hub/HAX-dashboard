@@ -5,6 +5,7 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
+import '@haxtheweb/simple-icon/simple-icon.js';
 import "./hax-card.js";
 
 /**
@@ -284,8 +285,8 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       </div>  
 
       <div class="cards-wrapper">
-          ${
-            this.filteredData.map((item)=>{
+        
+          ${this.filteredData.map((item)=>{
             
             return html`
             <hax-card 
@@ -293,8 +294,8 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
               description="${item.description}"
               name="${item.use_case}"
               id="${item.id}"
-              tags="${item.tags}"
-              features="${item.features}"
+              .tags="${item.tags}"
+              .features="${item.features}"
               use-case="${item.use_case}"
               
               ?isSelected="${this.selectedCard[0]===item.id}"

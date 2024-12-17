@@ -5,6 +5,8 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
+import '@haxtheweb/simple-icon/simple-icon.js';
+
 
 /**
  * `hax-card`
@@ -26,8 +28,10 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     this.imageSrc =  '';
     this.url =  '';
     this.id =  '';
+    this.tags =  [];
+    this.features =  [];
     this.isHidden = false;
-
+    this.featuresIconMap = new Map([["Accessible", "accessibility"], ["Multi-Language Support", "translate"], ["Downloadable PDF", "file-download"], ["Mobile Compatible", "hardware:phone-iphone"]]);
 
   }
 
@@ -40,6 +44,8 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       imageSrc: { type: String },
       url: { type: String },
       id: { type: String },
+      tags: { type: Array },
+      features: { type: Array },
       isHidden: { type: Boolean, reflect: true },
       isSelected: { type: Boolean, reflect: true },
 
@@ -63,9 +69,9 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       flex-direction: column;
 
       gap: var(--ddd-spacing-3, 20px);
-      flex-wrap: wrap;
+      /* flex-wrap: wrap; */
 
-      height: 220px;
+      /* height: 420px; */
       padding: var(--ddd-spacing-5, 20px);
       border: var(--ddd-border-sm, black solid 3px);
       font-family: var(--ddd-font-primary, roboto);
@@ -81,7 +87,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
 
     :host([isSelected]) {
       .card-container{
-        background-color: gray;
+        background-color: lightgray;
       }
     }
 
@@ -90,7 +96,8 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       font: inherit;
       display: flex;
       flex-direction: column;
-      gap: var(--ddd-spacing-3,20px);
+      flex: 0 0 90px;
+      gap: var(--ddd-spacing-3, 20px);
     }
 
 
@@ -102,13 +109,17 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       /* margin-bottom:  var(--ddd-spacing-4); */
     }
 
-    .card-container img {
-      display: block;
-      width: 250px;
-      max-height: 250px;
-      object-fit: contain;
-      margin: auto;
+    .img-container{
+      /* display: block; */
+
       
+      /* margin: auto; */
+      
+    }
+    .img-container img{
+      width: 280px;
+      height: 220px;
+      object-fit: cover;
     }
     a div{
       /* text-decoration: none; */
@@ -120,10 +131,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       margin: 0 3px 0 5px;
     }
 
-    .text-row {
-        display: flex;
-        flex-direction: column;
-    }
+
 
     .label {
         width: 120px; /* Adjust based on your desired label width */
@@ -135,10 +143,20 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     }
     #select-button{
       width: 80px;
-      height: 40px;
+      min-height: 40px;
       background-color: black;
       color: white;
+      align-self: flex-end;
       /* font-size: inherit; */
+    }
+    .bottom-row{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tags{
+      font-size: 14px;
     }
 
 
@@ -149,7 +167,6 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
   render() {
     return html`
 <div class="card-container" style="--site-hex-code: ${this.hexCode};">
-
        
   <a  href="${this.pageLink}" target="_blank" rel="noopener noreferrer">  </a>
 
@@ -157,20 +174,29 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     ${this.title}
   </div>
 
-
-  <a href="${this.imageSrc}" target="_blank" rel="noopener noreferrer">
-    <img src="${this.imageSrc}" alt="${this.imageSrc}">
-  </a>
-
-  <div class="text-container" >
-
-    <div class="text-row">
-      <p>${this.description}</p>
-    </div>
+  <div class="img-container">
+    <img src="${this.getImgSrc()}" alt="${this.getImgSrc()}">
 
   </div>
+  <div class="text-container" >
 
-  <button id="select-button" @click="${this._handleClick}">${this.isSelected? html`Selected`: html`Select`}</button>
+    <div class="description">${this.description}</div>
+    <div class="tags"><span>Tags: </span>${this.getTags()}</div>
+
+  </div>
+  <div class="bottom-row">
+
+    <div class="icons">
+      ${this.features.map((feature)=>html`     
+        <simple-icon icon="${this.featuresIconMap.get(feature)}" title="${feature}"></simple-icon>
+      `)}
+      
+
+    </div>   
+    
+    <button id="select-button" @click="${this._handleClick}">${this.isSelected? html`Selected`: html`Select`}</button>
+
+  </div>
 </div>
     `;
   }
@@ -185,6 +211,19 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     });
     this.dispatchEvent(event);  // Dispatch the event
   }
+
+  getImgSrc(){
+    
+    let url = `./lib/img/${this.id}.png`;
+    return new URL(url, import.meta.url).href;
+  }
+  getTags(){
+    
+    console.log(this.tags)
+    return this.tags.join(", ");
+  }
+
+  
 
 
   /**

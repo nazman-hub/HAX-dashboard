@@ -43,14 +43,6 @@
       "features": ["Accessible", "Downloadable PDF"]
     },
     {
-      "id": "4",
-      "use_case": "collection",
-      "title": "Portfolio",
-      "description": "A space to showcase your professional projects, skills, and achievements.",
-      "tags": ["portfolio", "professional","collection", "career"],
-      "features": ["Mobile Compatible", "Accessible", "Multi-Language Support", "Downloadable PDF"]
-    },
-    {
       "id": "5",
       "use_case": "blog",
       "title": "Event",
@@ -77,10 +69,10 @@
     {
       "id": "8",
       "use_case": "website",
-      "title": "Portfolio v2",
+      "title": "Portfolio Website",
       "description": "An enhanced version of your portfolio, optimized for dynamic project showcases.",
-      "tags": ["portfolio", "professional", "dynamic"],
-      "features": ["website","Mobile Compatible", "Accessible", "Multi-Language Support", "Interactive Elements"]
+      "tags": ["website","portfolio", "professional", "dynamic"],
+      "features": ["Mobile Compatible", "Accessible", "Multi-Language Support", "Interactive Elements"]
     }
     
   ]
