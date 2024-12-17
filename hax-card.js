@@ -29,7 +29,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     this.useCase =  '';
     this.id =  '';
     this.tags =  [];
-    this.features =  [];
+    this.features =  [];s
     this.isHidden = false;
     this.featuresIconMap = new Map([["Accessible", "accessibility"], ["Multi-Language Support", "translate"], ["Downloadable PDF", "file-download"], ["Mobile Compatible", "hardware:phone-iphone"]]);
 
@@ -63,6 +63,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
 
     }
 
+
     /* contains .title, .image-container, and .text-container */
     .card-container{
       display: flex;
@@ -73,12 +74,12 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
 
       height: 470px;
       padding: var(--ddd-spacing-5, 20px);
-      border: var(--ddd-border-sm, black solid 3px);
+      /* border: var(--ddd-border-sm, black solid 3px); */
       border-radius: 12px;
       font-family: var(--ddd-font-primary, roboto);
       font-size:16px;
-      color: var(--ddd-theme-primary);
-      background-color: var(--ddd-theme-default-white);
+      color: white;
+      background-color: var(--ddd-theme-default-nittanyNavy);
     }
 
     :host([isHidden]) {
@@ -88,7 +89,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
 
     :host([isSelected]) {
       .card-container{
-        background-color: lightgray;
+        background-color: var(--ddd-theme-default-coalyGray);
       }
     }
 
@@ -110,45 +111,31 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       /* margin-bottom:  var(--ddd-spacing-4); */
     }
 
-    .img-container{
-      /* display: block; */
-
-      
-      /* margin: auto; */
-      
-    }
     .img-container img{
       width: 280px;
       height: 220px;
       object-fit: cover;
     }
-    a div{
-      /* text-decoration: none; */
-      color:  var(--ddd-theme-primary); 
-    }
+ 
 
     a[target="_blank"].text::after {
       content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);
       margin: 0 3px 0 5px;
     }
 
-
-
     .label {
         width: 120px; /* Adjust based on your desired label width */
         font-weight: bold;
     }
-    .title a{
-      /* text-decoration: none;  */
-      color: unset; 
-    }
+
     #select-button{
       width: 80px;
       min-height: 40px;
-      background-color: black;
-      color: white;
+      background-color: white;
+      color: black;
+      font-weight: bold;
       align-self: flex-end;
-      /* font-size: inherit; */
+      font-size: inherit;
     }
     .bottom-row{
       display: flex;
@@ -161,11 +148,19 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     }
     .tags{
       font-size: 14px;
-      color:gray;
+      color:var(--ddd-theme-default-limestoneGray);
+      font-style: italic;
+
     }
     .tags span{
       font-weight: bold;
-      font-style: italic;
+
+    }
+    .link a{
+      /* color: unset; */
+      color: white;
+      text-decoration: underline;
+      font-weight: bold;
     }
 
 
@@ -192,14 +187,14 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     <div class="description">${this.description}</div>
     <div class="tags"><span>Tags: </span>${this.getTags()}</div>
 
-    <div><a href="${`https://hax.cloud/?${this.useCase}`}" target="_blank" rel="noopener noreferrer">Demo</a></div>
+    <div class="link"><a  class="link" href="${`https://hax.cloud/?${this.useCase}`}" target="_blank" rel="noopener noreferrer">Demo</a></div>
 
   </div>
   <div class="bottom-row">
 
     <div class="icons">
       ${this.features.map((feature)=>html`     
-        <simple-icon icon="${this.featuresIconMap.get(feature)}" title="${feature}"></simple-icon>
+        <simple-icon icon="${this.featuresIconMap.get(feature)}" title="${feature}" dark></simple-icon>
       `)}
       
 

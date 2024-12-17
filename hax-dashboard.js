@@ -71,36 +71,27 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       :host {
         display: block;
         color: var(--ddd-theme-primary);
-        /* background-color: var(--ddd-theme-accent); */
         font-family: var(--ddd-font-navigation);
+       
       }
       .wrapper {
         display: block;
-
+        background-color: var(--ddd-theme-default-potentialMidnight);
+        color: white;
+        padding-bottom: var(--ddd-spacing-5, 20px);
+        min-height: 100vh;
       }
-      /* h3 span {
-        font-size: var(--hax-dashboard-label-font-size, var(--ddd-font-size-s));
-      } */
-
       .section{
-        min-width: 100vw;
         margin: auto;
-        padding: 0 30px;
-        background-color: white, var(--ddd-theme-default-slateMaxLight);
-
+        padding: 0 var(--ddd-spacing-8, 20px);
       }
-
       .header{
         display: flex;
         justify-content: space-between;
         align-items: center;
         height: 50px;
-        /* width: 1000px; */
         margin: auto;
-        /* padding-top: var(--ddd-spacing-2); */
-        background-color: var(--ddd-theme-default-info);
-
-        
+  
       }
       .logo{
         object-fit: cover;
@@ -117,35 +108,31 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         margin: 0;
       }
       .hero{
-        height: 100px;
+        height: 150px;
         display: flex;
-        justify-content: space-around;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        /* background-color: navajowhite; */
+        color: white;
       }
 
       .tag{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        /* font-size: 16px; */
         min-height: 40px;
-        
-
       }
       .tag-left{
         display: flex;
         align-items: center;
         gap: 5px;
-
-        /* gap: var(--ddd-spacing-4); */
       }
       .tag-left p{
-        background-color: lightgray;
-        padding: 5px 10px;
+        background-color: white;
+        color: black;
+        padding: var(--ddd-spacing-1, 5px) var(--ddd-spacing-3, 10px);
         border-radius: 20px;
       }
-
       .cards-search{
         display: flex;
 
@@ -155,10 +142,9 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         display: flex;
         flex-direction: column;
         min-width: 250px;
-        gap: 10px;
-        background-color: var(--ddd-theme-default-white, blue);
-        padding: 20px;
-        border: var(--ddd-border-sm);
+        gap: var(--ddd-spacing-3, 10px);
+        /* background-color: var(--ddd-theme-default-white, blue); */
+        padding: var(--ddd-spacing-5, 20px);
 
       }
 
@@ -179,35 +165,35 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         gap: 20px;
         /* margin: auto; */
         flex-wrap: wrap;
-        padding-left: 20px;
+        padding-left: var(--ddd-spacing-5, 20px);
       }
       hax-card{
         flex: 0 0 0;
       }
 
       .continue-wrapper{
+        padding: 20px;
         display: flex;
         flex-direction: column;
         align-items: flex-end;
       }
       .continue-button{
-        
-        background-color: black;
-        color: white;
-        padding: 5px;
+        font-weight: bold;
+        background-color: white;
+        color: black;
+        padding: var(--ddd-spacing-2, 20px);
+        height: 50px;
         font-size: inherit;
 
       }
       .continue-button:disabled{
         
-        background-color: gray;
-        color: white;
-        padding: 5px;
+        background-color: var(--ddd-theme-default-limestoneGray);
         font-size: inherit;
 
       }
       .continue-button:hover{
-        background-color: gray;
+        background-color: var(--ddd-theme-default-limestoneGray);
         cursor: pointer;
       }
 
@@ -215,7 +201,6 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         font-size: inherit;
       }
       #reset-button{
-        color: var(--ddd-theme-default-link);
         text-decoration: underline;
       }
       #reset-button:hover{
@@ -245,7 +230,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
  
     <div class="hero section" >
       <div class="title">
-        <h2>Create a HAX site</h2>
+        <h2>Create a &lt;HAX&gt; site</h2>
       </div>
       <p class="description">Create anything you want</p>      
     </div>
@@ -346,10 +331,12 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       this.selectedCard = [];
       this.shadowRoot.querySelector(".continue-button").disabled = true;
     } else{
-      this.selectedCard = [event.target.id];
+      this.selectedCard = [event.target.id, event.target.title];
 
       this.shadowRoot.querySelector(".continue-button").disabled = false;
     }
+    console.log(this.selectedCard)
+
     
     
     this.requestUpdate();
@@ -390,7 +377,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
   }
 
   continue(){
-    alert(this.selectedCard);
+    alert(this.selectedCard[1]);
   }
   
   fetchData(){
