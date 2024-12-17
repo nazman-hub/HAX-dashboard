@@ -25,8 +25,8 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     this.title =  '';
     this.name =  '';
     this.description =  '';
-    this.imageSrc =  '';
     this.url =  '';
+    this.useCase =  '';
     this.id =  '';
     this.tags =  [];
     this.features =  [];
@@ -41,9 +41,9 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       name: { type: String },
       title: { type: String },
       description: { type: String },
-      imageSrc: { type: String },
       url: { type: String },
       id: { type: String },
+      useCase: { type: String, attribute: 'use-case' },
       tags: { type: Array },
       features: { type: Array },
       isHidden: { type: Boolean, reflect: true },
@@ -71,9 +71,10 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       gap: var(--ddd-spacing-3, 20px);
       /* flex-wrap: wrap; */
 
-      /* height: 420px; */
+      height: 470px;
       padding: var(--ddd-spacing-5, 20px);
       border: var(--ddd-border-sm, black solid 3px);
+      border-radius: 12px;
       font-family: var(--ddd-font-primary, roboto);
       font-size:16px;
       color: var(--ddd-theme-primary);
@@ -96,7 +97,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       font: inherit;
       display: flex;
       flex-direction: column;
-      flex: 0 0 90px;
+      flex: 1 0 0;
       gap: var(--ddd-spacing-3, 20px);
     }
 
@@ -154,9 +155,17 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       justify-content: space-between;
       align-items: center;
     }
+    .description{
+      flex: 1 0 30px;
 
+    }
     .tags{
       font-size: 14px;
+      color:gray;
+    }
+    .tags span{
+      font-weight: bold;
+      font-style: italic;
     }
 
 
@@ -182,6 +191,8 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
 
     <div class="description">${this.description}</div>
     <div class="tags"><span>Tags: </span>${this.getTags()}</div>
+
+    <div><a href="${`https://hax.cloud/?${this.useCase}`}" target="_blank" rel="noopener noreferrer">Demo</a></div>
 
   </div>
   <div class="bottom-row">
@@ -218,9 +229,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     return new URL(url, import.meta.url).href;
   }
   getTags(){
-    
-    console.log(this.tags)
-    return this.tags.join(", ");
+        return this.tags.join(", ");
   }
 
   

@@ -327,7 +327,6 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     }
     this.dataCount = this.filteredData.length;
     let x = this.shadowRoot.querySelector('hax-card').querySelector('button');
-    // console.log(x)
 
 
   }
@@ -388,11 +387,10 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     }
     this.filterData();
 
-    // console.log(this.activeFilters)
   }
 
   continue(){
-    alert(this.selectedCard[0]);
+    alert(this.selectedCard);
   }
   
   fetchData(){
