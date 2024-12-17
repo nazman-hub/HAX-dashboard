@@ -29,7 +29,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     this.useCase =  '';
     this.id =  '';
     this.tags =  [];
-    this.features =  [];s
+    this.features =  [];
     this.isHidden = false;
     this.featuresIconMap = new Map([["Accessible", "accessibility"], ["Multi-Language Support", "translate"], ["Downloadable PDF", "file-download"], ["Mobile Compatible", "hardware:phone-iphone"]]);
 
