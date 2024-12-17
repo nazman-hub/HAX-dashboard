@@ -1,6 +1,7 @@
 {"status": 200,
   "data": [
     {
+      "id": "0",
       "use_case": "blog",
       "title": "Blog",
       "description": "A great way to connect with others, share personal stories, offer tips, or discuss interests.",
@@ -9,6 +10,7 @@
       }
     , 
     {
+      "id": "1",
       "use_case": "collection",
       "title": "Collection",
       "description": "Use this to link to a portfolio of work, showcase work, or anything you like!",
@@ -16,6 +18,7 @@
       "features": ["Accessible", "Mobile Compatible", "Multi-Language Support", "Downloadable PDF"]
     }, 
     {
+      "id": "2",
       "use_case": "course",
       "title": "Course",
       "description": "Publish your online course materials easily!",
@@ -24,6 +27,16 @@
       
     }, 
     {
+      "id": "3",
+      "use_case": "website",
+      "title": "Website",
+      "description": "Design a website easily.",
+      "tags": ["website", "site", "personal", "educational"],
+      "features": ["Accessible", "Mobile Compatible", "Multi-Language Support", "Downloadable PDF"]
+      
+    },
+    {
+      "id": "4",
       "use_case": "website",
       "title": "Website",
       "description": "Design a website easily.",

@@ -62,6 +62,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        font-family: var(--ddd-font-primary, roboto);
         
       }
 
@@ -80,7 +81,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       } */
 
       .section{
-        /* width: 1300px; */
+        min-width: 100vw;
         margin: auto;
         padding: 0 30px;
         background-color: white, var(--ddd-theme-default-slateMaxLight);
@@ -271,7 +272,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
 
             
           </div>
-          ${this.data.map((item)=>html`<div><input @click="${this.updateFilter}" type="checkbox" name="filter" value="${item.use_case}"> ${item.title} </div>`)}
+          ${this.data.map((item)=>html`<label><input @click="${this.updateFilter}" type="checkbox" name="filter" value="${item.use_case}"> ${item.title} </label>`)}
 
 
        </div>
@@ -286,7 +287,8 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
               title="${item.title}"
               description="${item.description}"
               name="${item.use_case}"
-              ?isSelected="${this.selectedCard[0] === item.use_case}"
+              id="${item.id}"
+              ?isSelected="${this.selectedCard[0]===item.id}"
             ></hax-card>
             `})
             }
@@ -295,6 +297,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
 </div>`;
   }
   firstUpdated(){
+    super.firstUpdated();
     this.fetchData();
     let x = this.shadowRoot.querySelector('hax-card');
     
@@ -330,18 +333,17 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
   }
 
   _handleCardClick(event) {
-    if(event.target.name === this.selectedCard[0]){
+    if(event.target.id === this.selectedCard[0]){
       this.selectedCard = [];
       this.shadowRoot.querySelector(".continue-button").disabled = true;
     } else{
-      this.selectedCard = [];
-      this.selectedCard.push(event.target.name);
+      this.selectedCard = [event.target.id];
+
       this.shadowRoot.querySelector(".continue-button").disabled = false;
     }
     
     
     this.requestUpdate();
-    console.log(this.selectedCard[0]);
   }
 
   resetFilter(){

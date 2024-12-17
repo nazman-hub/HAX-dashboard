@@ -25,6 +25,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     this.description =  '';
     this.imageSrc =  '';
     this.url =  '';
+    this.id =  '';
     this.isHidden = false;
 
 
@@ -38,6 +39,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
       description: { type: String },
       imageSrc: { type: String },
       url: { type: String },
+      id: { type: String },
       isHidden: { type: Boolean, reflect: true },
       isSelected: { type: Boolean, reflect: true },
 
@@ -84,12 +86,13 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
     }
 
     
-    .text-container{
-      font-weight: 400;
+    .text-container{  
+      font: inherit;
       display: flex;
       flex-direction: column;
       gap: var(--ddd-spacing-3,20px);
     }
+
 
     .title{
       font-size:18px;
@@ -162,7 +165,7 @@ export class HaxCard extends DDDSuper(I18NMixin(LitElement)) {
   <div class="text-container" >
 
     <div class="text-row">
-      <span>${this.description}</span>
+      <p>${this.description}</p>
     </div>
 
   </div>
