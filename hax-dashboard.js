@@ -29,6 +29,7 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
     this.dataCount = 0;
     this.selectedCard = [];
     this._handleCardClick = this._handleCardClick.bind(this); // Bind the handler
+    this.filtersList = new Set();
 
 
     this.registerLocalization({
@@ -269,11 +270,15 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
         <div class="filter-wrapper"> 
           <div class="filter-title"> 
             <h3>Filters</h3>
-
-            
           </div>
-          ${this.data.map((item)=>html`<label><input @click="${this.updateFilter}" type="checkbox" name="filter" value="${item.use_case}"> ${item.title} </label>`)}
 
+          <!-- print filters -->
+          ${Array.from(this.filtersList).map((filter) => html`
+            <label>
+              <input @click="${this.updateFilter}" type="checkbox" name="filter" value="${filter}"> 
+              ${this.capitalizeWords(filter)} 
+            </label>`
+          )}
 
        </div>
       </div>  
@@ -288,6 +293,10 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
               description="${item.description}"
               name="${item.use_case}"
               id="${item.id}"
+              tags="${item.tags}"
+              features="${item.features}"
+              use-case="${item.use_case}"
+              
               ?isSelected="${this.selectedCard[0]===item.id}"
             ></hax-card>
             `})
@@ -376,8 +385,6 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       this.activeFilters.push(searchInput.toLowerCase());
 
     }
-
-
     this.filterData();
 
     // console.log(this.activeFilters)
@@ -397,15 +404,29 @@ export class HaxDashboard extends DDDSuper(I18NMixin(LitElement)) {
       return response.json();
     })
     .then(data => {
-      this.data = [];
-      this.data = data.data; 
+      this.data = [...data.data]; 
+      //sort alphabetically
+      this.data.sort((a, b) => a.title.localeCompare(b.title));
       this.filteredData = this.data; 
       this.loading = false;
       this.dataCount = this.data.length;
 
+      //add use cases to filters list (which is a set to prevent dups)
+      this.data.forEach((d) => {
+        this.filtersList.add(d.use_case);
+      });          
+      
     })
     .catch(error => console.error('Error fetching the JSON:', error));
-    }
+
+  }
+  
+  capitalizeWords(sentence) {
+    return sentence
+      .split(" ")                             
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
+      .join(" ");                             
+  }
 
     /**
      * haxProperties integration via file reference

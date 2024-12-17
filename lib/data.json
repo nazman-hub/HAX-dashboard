@@ -15,7 +15,7 @@
       "title": "Collection",
       "description": "Use this to link to a portfolio of work, showcase work, or anything you like!",
       "tags": ["collection", "personal", "professional"],
-      "features": ["Accessible", "Mobile Compatible", "Multi-Language Support", "Downloadable PDF"]
+      "features": ["Accessible"]
     }, 
     {
       "id": "2",
@@ -23,7 +23,7 @@
       "title": "Course",
       "description": "Publish your online course materials easily!",
       "tags": ["course", "online", "educational"],
-      "features": ["Accessible", "Mobile Compatible", "Multi-Language Support", "Downloadable PDF"]
+      "features": ["Mobile Compatible", "Downloadable PDF"]
       
     }, 
     {
@@ -32,17 +32,56 @@
       "title": "Website",
       "description": "Design a website easily.",
       "tags": ["website", "site", "personal", "educational"],
-      "features": ["Accessible", "Mobile Compatible", "Multi-Language Support", "Downloadable PDF"]
-      
+      "features": ["Mobile Compatible", "Multi-Language Support"]
     },
     {
       "id": "4",
+      "use_case": "course",
+      "title": "Tutorial",
+      "description": "Step-by-step guides and instructional content to help users learn new skills.",
+      "tags": ["course", "website", "site", "personal", "educational"],
+      "features": ["Accessible", "Downloadable PDF"]
+    },
+    {
+      "id": "4",
+      "use_case": "collection",
+      "title": "Portfolio",
+      "description": "A space to showcase your professional projects, skills, and achievements.",
+      "tags": ["portfolio", "professional","collection", "career"],
+      "features": ["Mobile Compatible", "Accessible", "Multi-Language Support", "Downloadable PDF"]
+    },
+    {
+      "id": "5",
+      "use_case": "blog",
+      "title": "Event",
+      "description": "Share event details, schedules, and updates for conferences, meetups, or personal gatherings.",
+      "tags": ["blog","event", "conference", "personal", "professional"],
+      "features": ["Mobile Compatible", "Accessible", "Multi-Language Support"]
+    },
+    {
+      "id": "6",
+      "use_case": "collection",
+      "title": "Gallery",
+      "description": "Display a collection of images, artworks, or visual content.",
+      "tags": ["collection","gallery", "visual", "creative", "personal"],
+      "features": ["Mobile Compatible", "Accessible"]
+    },
+    {
+      "id": "7",
+      "use_case": "collection",
+      "title": "Resume",
+      "description": "Highlight your professional experience, skills, and qualifications.",
+      "tags": ["Resume","resume", "career", "professional"],
+      "features": ["Mobile Compatible", "Downloadable PDF", "Accessible"]
+    },
+    {
+      "id": "8",
       "use_case": "website",
-      "title": "Website",
-      "description": "Design a website easily.",
-      "tags": ["website", "site", "personal", "educational"],
-      "features": ["Accessible", "Mobile Compatible", "Multi-Language Support", "Downloadable PDF"]
-      
+      "title": "Portfolio v2",
+      "description": "An enhanced version of your portfolio, optimized for dynamic project showcases.",
+      "tags": ["portfolio", "professional", "dynamic"],
+      "features": ["website","Mobile Compatible", "Accessible", "Multi-Language Support", "Interactive Elements"]
     }
+    
   ]
 }
